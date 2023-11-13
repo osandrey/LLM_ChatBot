@@ -24,7 +24,7 @@ def chat(raw_text):
 
 def save_file(raw_text):
     try:
-        with open("history/history.txt", "w", encoding="utf-8") as file:
+        with open("history/save.txt", "w", encoding="utf-8") as file:
             file.write(raw_text)
             st.success("Saved successfully.")
     except Exception as er:
