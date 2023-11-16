@@ -23,9 +23,9 @@ load_dotenv()
 
 OPENAI_API_KEY = settings.openai_api_key
 print(OPENAI_API_KEY)
-OPENAI_API_KEY="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"
+OPENAI_API_KEY="!!!!!!!!!!"
 
-os.environ[OPENAI_API_KEY] = "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"
+os.environ[OPENAI_API_KEY] = "!!!!!!!!!!!"
 print(OPENAI_API_KEY)
 
 """ Convert PDF to Text"""
