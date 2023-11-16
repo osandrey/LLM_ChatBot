@@ -75,6 +75,7 @@ def login():
             state.redirect_to_main = True
             state.user_info = response.json().get("user_info")
             # st.json(response.json())
+            st.session_state.runpage = main_page
 
 
         else:
@@ -91,6 +92,26 @@ def login():
 
 def main_page():
     st.title("Main Page")
+
+    # Check if the user is logged in
+    if getattr(state, 'user_info', None):
+        st.write(f"Welcome, {state.user_info.get('username')}!")
+
+        # Add more content or displays for the logged-in user
+        st.write("You can customize this section based on your application's features.")
+
+        # Example button to log out
+        if st.button("Log Out"):
+            # Clear user information and redirect to the login page
+            state.user_info = None
+            st.experimental_set_query_params(page="Log In")
+    else:
+        # Display for users who are not logged in
+        st.write("Please log in to access the main page.")
+        st.button("Log In", on_click=lambda: st.experimental_set_query_params(page="Log In"))
+
+
+
 
 
 # Function to refresh the access token
@@ -166,13 +187,54 @@ def update_password():
             st.error("Passwords do not match.")
 
 # Streamlit App
+# def main():
+#     st.sidebar.title("FastAPI Streamlit App")
+#     selected_page = st.sidebar.selectbox("Select a page", ["Sign Up", "Log In", "Refresh Token",
+#                                                            "Confirm Email", "Request Email Confirmation",
+#                                                            "Reset Password", "Password Reset Confirmation",
+#                                                            "Update Password"])
+#
+#
+#
+#     if selected_page == "Sign Up":
+#         signup()
+#     elif selected_page == "Log In":
+#         login()
+#     elif selected_page == "Refresh Token":
+#         refresh_token()
+#     elif selected_page == "Confirm Email":
+#         confirmed_email()
+#     elif selected_page == "Request Email Confirmation":
+#         request_email()
+#     elif selected_page == "Reset Password":
+#         reset_password()
+#     elif selected_page == "Password Reset Confirmation":
+#         password_reset_confirm()
+#     elif selected_page == "Update Password":
+#         update_password()
+
 def main():
     st.sidebar.title("FastAPI Streamlit App")
-    selected_page = st.sidebar.selectbox("Select a page", ["Sign Up", "Log In", "Refresh Token",
-                                                           "Confirm Email", "Request Email Confirmation",
-                                                           "Reset Password", "Password Reset Confirmation",
-                                                           "Update Password"])
 
+    # Add a radio button to choose between "Auth" and "Chat" options
+    selected_option = st.sidebar.radio("Select an option:", ["Auth", "Chat"])
+
+    # Based on the selected option, display different page choices
+    if selected_option == "Auth":
+        selected_page = st.sidebar.selectbox("Select a page", ["Sign Up", "Log In", "Refresh Token",
+                                                               "Confirm Email", "Request Email Confirmation",
+                                                               "Reset Password", "Password Reset Confirmation",
+                                                               "Update Password"])
+    elif selected_option == "Chat":
+        # Add your chat-related page choices here
+        selected_page = st.sidebar.selectbox("Select a page for Chat", ["Chat Page 1", "Chat Page 2", "Chat Page 3"])
+
+    # The rest of your code remains unchanged
+    if 'page' not in st.experimental_get_query_params():
+        st.experimental_set_query_params(page="Login")
+
+    # Determine which page to display based on the query parameter
+    selected_page = st.experimental_get_query_params().get("page", [""])[0]
 
     if selected_page == "Sign Up":
         signup()
@@ -190,6 +252,7 @@ def main():
         password_reset_confirm()
     elif selected_page == "Update Password":
         update_password()
+
 
 if __name__ == "__main__":
     main()
