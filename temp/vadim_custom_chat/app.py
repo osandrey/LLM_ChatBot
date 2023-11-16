@@ -149,13 +149,14 @@ def main():
     if st.button("Close Chat"):
         close_chat()
 
-    with st.sidebar:
-        st.subheader("Your documents")
+
         choice = st.radio("Choose an option:", ("Upload PDF file",
                                                 "Upload TXT file",
                                                 "Upload DOCX file",
                                                 "Enter web link",
                                                 "Upload Saved file",))
+        with st.sidebar:
+            st.subheader("Your documents")
         try:
             if choice == "Enter web link":
                 new_doc = st.text_input("Enter a web link:")

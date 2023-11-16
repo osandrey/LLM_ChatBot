@@ -23,7 +23,7 @@ load_dotenv()
 
 OPENAI_API_KEY = settings.openai_api_key
 print(OPENAI_API_KEY)
-OPENAI_API_KEY="!!!!!!!!!!"
+OPENAI_API_KEY = "!!!!!!!!!!"
 
 os.environ[OPENAI_API_KEY] = "!!!!!!!!!!!"
 print(OPENAI_API_KEY)
@@ -43,6 +43,7 @@ print(len(text))
 
 """ Create function to count tokens """
 tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+
 
 def count_tokens(text: str) -> int:
     return len(tokenizer.encode(text))
@@ -89,6 +90,7 @@ def print_chat_history():
         print(f'User: {user_query}')
         print(f'Bot: {bot_response}')
         print('-' * 20)
+
 
 print("Welcome to my BOT! Type 'exit' to stop")
 
