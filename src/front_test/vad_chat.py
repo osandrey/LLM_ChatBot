@@ -170,6 +170,6 @@ def close_chat():
         st.session_state.conversation = None
         st.session_state.chat_history = None
         st.success("Chat closed.")
-        st.experimental_rerun()
+        st.rerun()
     else:
         st.warning("No active chat to close.")

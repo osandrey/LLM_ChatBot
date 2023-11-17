@@ -295,6 +295,7 @@ def main():
                         with st.spinner("Processing"):
                             try:
                                 raw_text = get_txt_text(new_doc)
+                                st.success("Upload successfully.")
                                 chat(raw_text)
                             except Exception as er:
                                 st.warning(f"Error: {er}. No file to save.")
