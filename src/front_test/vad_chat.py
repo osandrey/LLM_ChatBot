@@ -1,4 +1,6 @@
 import os
+from urllib.parse import urlparse
+
 import requests
 import pickle
 import streamlit as st
@@ -14,27 +16,97 @@ from langchain.chains import ConversationalRetrievalChain
 
 from htmlTemplates import css, bot_template, user_template
 
-
 # from src.config.config import settings
 
 # os.environ["TOKENIZERS_PARALLELISM"] = "false"
 load_dotenv()
-
 
 # OPENAI_API_KEY = settings.openai_api_key
 
 OPENAI_API_KEY = "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"
 
 
+def save_file(raw_text, file_name):
+    with open(f"history/{file_name}.txt", "w", encoding="utf-8") as file:
+        file.write(raw_text)
+
+
+def file_name_link(link_doc):
+    parsed_url = urlparse(link_doc)
+    name = os.path.basename(parsed_url.path)
+    file_name, file_extension = os.path.splitext(name)
+    return file_name
+
+
+def get_html_text(new_doc):
+    text = ""
+    for doc in new_doc:
+        text += doc.page_content
+    return text
+
+
+def file_name_pdf(pdf_docs):
+    first_doc = pdf_docs[0] if len(pdf_docs) > 0 else None
+    if first_doc:
+        name = first_doc.name
+        file_name, file_extension = os.path.splitext(name)
+        return file_name
+    return None
+
+
+def get_pdf_text(pdf_docs):
+    text = ""
+    for pdf in pdf_docs:
+        pdf_reader = PdfReader(pdf)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
+
+
+def file_name_docx(docs_doc):
+    first_doc = docs_doc[0] if len(docs_doc) > 0 else None
+    if first_doc:
+        name = first_doc.name
+        file_name, file_extension = os.path.splitext(name)
+        return file_name
+    return None
+
+
+def get_docx_text(docs_doc):
+    text = ""
+    try:
+        for docx in docs_doc:
+            doc = Document(docx)
+            for paragraph in doc.paragraphs:
+                text += paragraph.text + "\n"
+    except Exception as e:
+        # Handle specific exceptions here, e.g., catching an incomplete file
+        st.warning(f"Error reading DOCX file: {e}. No file to save.")
+        return None  # Return None to indicate an error
+
+    return text
+
+
+def file_name_txt(txt_docs):
+    first_doc = txt_docs[0] if len(txt_docs) > 0 else None
+    if first_doc:
+        name = first_doc.name
+        file_name, file_extension = os.path.splitext(name)
+        return file_name
+    return None
+
+
+def get_txt_text(txt_doc):
+    text = ""
+    for txt_doc in txt_doc:
+        text += txt_doc.getvalue().decode('utf-8') + "\n"
+    return text
+
+
 def chat(raw_text):
     text_chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(text_chunks)
     st.session_state.conversation = get_conversation_chain(vectorstore)
-
-
-def save_file(raw_text):
-    with open("save.txt", "w", encoding="utf-8") as file:
-        file.write(raw_text)
 
 
 def get_load_text(file_name):
@@ -47,48 +119,6 @@ def get_load_text(file_name):
     else:
         st.warning("No file selected.")
         return ""
-
-
-def close_chat():
-    if st.session_state.conversation is not None:
-        st.session_state.conversation = None
-        st.session_state.chat_history = None
-        st.success("Chat closed.")
-        st.experimental_rerun()
-    else:
-        st.warning("No active chat to close.")
-
-
-def get_html_text(new_doc):
-    text = ""
-    for doc in new_doc:
-        text += doc.page_content
-    return text
-
-
-def get_pdf_text(new_doc):
-    text = ""
-    for pdf in new_doc:
-        pdf_reader = PdfReader(pdf)
-        for page in pdf_reader.pages:
-            text += page.extract_text()
-    return text
-
-
-def get_docx_text(new_doc):
-    text = ""
-    for docx in new_doc:
-        doc = Document(docx)
-        for paragraph in doc.paragraphs:
-            text += paragraph.text + "\n"
-    return text
-
-
-def get_txt_text(new_doc):
-    text = ""
-    for txt_doc in new_doc:
-        text += txt_doc.getvalue().decode('utf-8') + "\n"
-    return text
 
 
 def get_text_chunks(text):
@@ -133,3 +163,13 @@ def handle_userinput(user_question):
                 st.write(bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
     else:
         pass
+
+
+def close_chat():
+    if st.session_state.conversation is not None:
+        st.session_state.conversation = None
+        st.session_state.chat_history = None
+        st.success("Chat closed.")
+        st.experimental_rerun()
+    else:
+        st.warning("No active chat to close.")
