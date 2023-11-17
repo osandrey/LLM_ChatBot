@@ -5,12 +5,14 @@ import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from docx import Document
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from transformers import GPT2TokenizerFast
+
 from htmlTemplates import css, bot_template, user_template
 from langchain.llms import HuggingFaceHub
 from langchain.document_loaders import WebBaseLoader
@@ -149,14 +151,13 @@ def main():
     if st.button("Close Chat"):
         close_chat()
 
-
+    with st.sidebar:
+        st.subheader("Your documents")
         choice = st.radio("Choose an option:", ("Upload PDF file",
                                                 "Upload TXT file",
                                                 "Upload DOCX file",
                                                 "Enter web link",
                                                 "Upload Saved file",))
-        with st.sidebar:
-            st.subheader("Your documents")
         try:
             if choice == "Enter web link":
                 new_doc = st.text_input("Enter a web link:")
@@ -164,6 +165,7 @@ def main():
                     loader = WebBaseLoader(web_path=new_doc)
                     html_doc = loader.load()
                     with st.spinner("Processing"):
+                        st.write(html_doc)
                         raw_text = get_html_text(html_doc)
                         save_file(raw_text)
                         chat(raw_text)
@@ -180,7 +182,9 @@ def main():
                 new_doc = st.file_uploader("Upload your TXTs here and click on 'Process'", accept_multiple_files=True)
                 if st.button("Process"):
                     with st.spinner("Processing"):
+                        # st.write(new_doc.__len__())
                         raw_text = get_txt_text(new_doc)
+                        st.write(raw_text)
                         save_file(raw_text)
                         chat(raw_text)
 

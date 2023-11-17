@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-import subprocess
+from vad_chat import *
 
 from langchain.document_loaders import WebBaseLoader
 
@@ -195,6 +195,9 @@ def update_password():
 
 
 def main():
+    st.set_page_config(page_title="Chat with multiple PDFs",
+                       page_icon=":books:")
+    st.write(css, unsafe_allow_html=True)
     st.sidebar.title("FastAPI Streamlit App")
 
     # Add a radio button to choose between "Auth" and "Chat" options
@@ -214,56 +217,90 @@ def main():
                                                                         "Enter web link",
                                                                         "Upload Saved file", ])
 
+        if "conversation" not in st.session_state:
+            st.session_state.conversation = None
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = None
+
+        # st.button("Create new chat")
+
+        user_question = st.text_input("Ask a question about your documents:books:")
+        if user_question:
+            handle_userinput(user_question)
+
+        if st.button("Close Chat"):
+            close_chat()
+
         with st.sidebar:
             st.subheader("Your documents")
-        try:
-            if selected_page == "Enter web link":
-                new_doc = st.text_input("Enter a web link:")
-                if st.button("Process Web Link"):
-                    loader = WebBaseLoader(web_path=new_doc)
-                    html_doc = loader.load()
-                    with st.spinner("Processing"):
-                        print(new_doc)
-                        # raw_text = get_html_text(html_doc)
-                        # save_file(raw_text)
-                        # chat(raw_text)
+            try:
+                if selected_page == "Enter web link":
+                    new_doc = st.text_input("Enter a web link:")
+                    if st.button("Process Web Link"):
+                        loader = WebBaseLoader(web_path=new_doc)
+                        html_doc = loader.load()
+                        with st.spinner("Processing"):
+                            raw_text = get_html_text(html_doc)
+                        try:
+                            save_file(raw_text)
+                            st.success("Saved successfully.")
+                            chat(raw_text)
+                        except Exception as er:
+                            st.warning(f"Error: {er}. No file to save.")
 
-            elif selected_page == "Upload PDF file":
-                new_doc = st.file_uploader("Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
-                if st.button("Process"):
-                    with st.spinner("Processing"):
-                        print(new_doc)
-                        # raw_text = get_pdf_text(new_doc)
-                        # save_file(raw_text)
-                        # chat(raw_text)
+                elif selected_page == "Upload PDF file":
+                    new_doc = st.file_uploader("Upload your PDFs here and click on 'Process'",
+                                               accept_multiple_files=True)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            raw_text = get_pdf_text(new_doc)
+                            try:
+                                save_file(raw_text)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
 
-            elif selected_page == "Upload TXT file":
-                new_doc = st.file_uploader("Upload your TXTs here and click on 'Process'", accept_multiple_files=True)
-                if st.button("Process"):
-                    with st.spinner("Processing"):
-                        print(new_doc)
-                        # raw_text = get_txt_text(new_doc)
-                        # save_file(raw_text)
-                        # chat(raw_text)
+                elif selected_page == "Upload TXT file":
+                    new_doc = st.file_uploader("Upload your TXTs here and click on 'Process'",
+                                               accept_multiple_files=True)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            # st.write(new_doc.__len__())
+                            raw_text = get_txt_text(new_doc)
+                            try:
+                                save_file(raw_text)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
 
-            elif selected_page == "Upload DOCX file":
-                new_doc = st.file_uploader("Upload your DOCXs here and click on 'Process'", accept_multiple_files=True)
-                if st.button("Process"):
-                    with st.spinner("Processing"):
-                        print(new_doc)
-                        # raw_text = get_docx_text(new_doc)
-                        # save_file(raw_text)
-                        # chat(raw_text)
+                elif selected_page == "Upload DOCX file":
+                    new_doc = st.file_uploader("Upload your DOCXs here and click on 'Process'",
+                                               accept_multiple_files=True)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            raw_text = get_docx_text(new_doc)
+                            try:
+                                save_file(raw_text)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
 
-            elif selected_page == "Upload Saved file":
-                new_doc = st.file_uploader("Upload your Saved file and click on 'Process'", accept_multiple_files=True)
-                if st.button("Process"):
-                    with st.spinner("Processing"):
-                        print(new_doc)
-                        # raw_text = get_txt_text(new_doc)
-                        # chat(raw_text)
-        except Exception as ex:
-            st.error(f"{ex} Error input!")
+                elif selected_page == "Upload Saved file":
+                    new_doc = st.file_uploader("Upload your Saved file and click on 'Process'",
+                                               accept_multiple_files=True)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            try:
+                                raw_text = get_txt_text(new_doc)
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+            except Exception as ex:
+                st.error(f"{ex} Error input!")
 
     # The rest of your code remains unchanged
     if 'page' not in st.experimental_get_query_params():

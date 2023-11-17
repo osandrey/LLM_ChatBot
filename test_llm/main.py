@@ -31,7 +31,7 @@ print(OPENAI_API_KEY)
 """ Convert PDF to Text"""
 file_path = "./Andrew Osypenko CV Sep 2023.pdf"
 doc = textract.process(filename=file_path)
-txt_file_path = f"{file_path}.txt"
+txt_file_path = f"{file_path.rstrip('.pdf')}.txt"
 """ Save to txt and reopen """
 with open(txt_file_path, "w", encoding="utf-8") as f:
     f.write(doc.decode("utf-8"))
