@@ -18,8 +18,8 @@ class State:
     redirect_to_main = False
     user_info = False
 
-# state = State()
 
+# state = State()
 
 
 # Function to sign up a new user
@@ -96,7 +96,6 @@ def login():
             print(f"{state.user_info=}")
             return False
 
-
         # if getattr(state, 'redirect_to_main', False):
         #     # Reset the redirect flag
         #     state.redirect_to_main = False
@@ -113,7 +112,6 @@ def main_page(state):
     else:
         st.write("Please log in to access the main page.")
         st.button("Log In", on_click=lambda: state.__setattr__("current_page", "Log In"))
-
 
 
 # Function to refresh the access token
@@ -282,6 +280,7 @@ def update_password(reset_password_token, new_password, confirm_password):
 #         update_password()
 
 def main():
+    global lan
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
     # st.write(css, unsafe_allow_html=True)
@@ -289,7 +288,6 @@ def main():
     selected_page = None
     # user_info = None
     st.sidebar.title("FastAPI Streamlit App")
-
 
     # Add a radio button to choose between "Auth" and "Chat" options
     selected_option = st.sidebar.radio("Select an option:", ["Auth", "Chat"])
@@ -303,7 +301,7 @@ def main():
                                                                "Update Password"])
 
     elif selected_option == "Chat":
-        if state.user_info:
+        if not state.user_info:
             st.write("Login success !!!!!!!!!!!!!!")
             selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
                                                                             "Upload TXT file",
@@ -316,13 +314,6 @@ def main():
                 st.session_state.conversation = None
             if "chat_history" not in st.session_state:
                 st.session_state.chat_history = None
-
-            user_question = st.text_input("Ask a question about your documents:books:")
-            if user_question:
-                handle_userinput(user_question)
-
-            if st.button("Close Chat"):
-                close_chat()
 
             with st.sidebar:
                 st.subheader("Your documents")
@@ -411,6 +402,30 @@ def main():
 
                 except Exception as ex:
                     st.error(f"{ex} Error input!")
+
+            user_question = st.text_input("Ask a question about your documents:books:")
+            if user_question:
+                handle_userinput(user_question)
+
+            selected_lang = st.radio("Select language:", ["українська",
+                                                          "english",
+                                                          "свинособача"
+                                                          ])
+
+            if selected_lang == "українська":
+                lan = "uk-UA"
+            elif selected_lang == "english":
+                lan = "en-US"
+            elif selected_lang == "свинособача":
+                lan = "ru-RU"
+
+            if st.button("Speak..."):
+                text = voice_input(lan)
+                handle_userinput(text)
+
+            if st.button("Close Chat"):
+                close_chat()
+
         else:
             st.warning("Please log in to access the chat.")
             selected_page = "Log In"
@@ -453,19 +468,18 @@ def main():
             # if st.button("Confirm Password Reset"):
             #     st.success("Password reset confirmed.")
 
-                # Step 3: Update Password
-                # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
-                # new_password = st.text_input("Enter your new password:", type="password")
-                # print(f"!!!!!!! !!!!First Pas {new_password}")
-                # confirm_password = st.text_input("Confirm your new password:")
-                # print(f"!!!!!!! !!!!!Second Pas {confirm_password}")
+            # Step 3: Update Password
+            # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
+            # new_password = st.text_input("Enter your new password:", type="password")
+            # print(f"!!!!!!! !!!!First Pas {new_password}")
+            # confirm_password = st.text_input("Confirm your new password:")
+            # print(f"!!!!!!! !!!!!Second Pas {confirm_password}")
             if st.button("Update Password"):
                 # if new_password == confirm_password:
-                    # Use the confirmed_token from the confirmation step
-                    # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
+                # Use the confirmed_token from the confirmation step
+                # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
                 update_password(reset_token, new_password, confirm_password)
                 st.success("Password updated successfully.")
-
 
 
 if __name__ == "__main__":

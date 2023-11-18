@@ -13,19 +13,28 @@ from langchain.chains import ConversationalRetrievalChain
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from htmlTemplates import bot_template, user_template
+import speech_recognition as sr
+
 
 # from src.config.config import settings
 
+# OPENAI_API_KEY = "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"
 load_dotenv()
-
-# OPENAI_API_KEY = settings.openai_api_key
-
-OPENAI_API_KEY = "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"
 
 
 def save_file(raw_text, file_name):
     with open(f"history/{file_name}.txt", "w", encoding="utf-8") as file:
         file.write(raw_text)
+
+
+def voice_input(lang):
+    r = sr.Recognizer()
+    with sr.Microphone(device_index=1) as source:
+        print("Listen...")
+        audio = r.listen(source)
+
+    text = r.recognize_google(audio, language=lang)
+    return text
 
 
 def file_name_web(link_doc):

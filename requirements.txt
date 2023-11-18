@@ -38,3 +38,7 @@ ipython~=8.17.2
 matplotlib~=3.8.1
 sounddevice~=0.4.6
 numpy~=1.26.2
+
+youtube_transcript_api
+speechrecognition
+pyaudio
