@@ -158,6 +158,19 @@ async def request_email(body: RequestEmail, background_tasks: BackgroundTasks, r
     return {"message": messages.INVALID_EMAIL}
 
 
+
+@router.post("/get_new_token")
+async def get_new_token(body: RequestEmail, db: Session = Depends(get_db)):
+    user = await repository_users.get_user_by_email(body.email, db)
+    if user:
+        email = body.email
+        token_verification = auth_service.create_email_token({"sub": email})
+        return {"token": token_verification}
+    else:
+        return {"message": messages.INVALID_EMAIL}
+
+
+
 @router.get("/password_reset_confirm/{token}")
 async def password_reset_confirm(token: str, db: Session = Depends(get_db)):
     """
@@ -172,6 +185,7 @@ async def password_reset_confirm(token: str, db: Session = Depends(get_db)):
     email = auth_service.get_email_from_token(token)
     user = await repository_users.get_user_by_email(email, db)
     reset_password_token = auth_service.create_email_token(data={"sub": user.email})
+    print(f"reset_password_token IS:::::::OSAOSAOSA:::::: {reset_password_token}")
     await repository_users.update_reset_token(user, reset_password_token, db)
     return {"reset_password_token": reset_password_token}
 
@@ -189,6 +203,7 @@ async def update_password(request: ResetPassword, db: Session = Depends(get_db))
     :return: A message that says &quot;password successfully updated&quot;
     """
     token = request.reset_password_token
+    print(f"token IS::::::{token}")
     email = auth_service.get_email_from_token(token)
     user = await repository_users.get_user_by_email(email, db)
     if user is None:
@@ -203,3 +218,11 @@ async def update_password(request: ResetPassword, db: Session = Depends(get_db))
     await repository_users.update_password(user, new_password, db)
     await repository_users.update_reset_token(user, None, db)
     return {"message": messages.PASSWORD_UPDATED}
+
+
+"""
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJzdWIiOiJvc2FhbmRyZXltYW5AZ21haWwuY29tIiwiaWF0IjoxNzAwMjMx
+MzkyLCJleHAiOjE3MDA4MzYxOTIsInNjb3BlIjoiZW1haWxfdG9rZW4ifQ.
+IAzxesRdVOu_H3d44L7SJVo_iQt0a88o_KdH3ffkHDY
+"""
