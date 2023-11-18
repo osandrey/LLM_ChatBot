@@ -1,29 +1,26 @@
 import os
 from urllib.parse import urlparse
-
-import requests
-import pickle
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from docx import Document
-from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from youtube_transcript_api import YouTubeTranscriptApi
 
-from htmlTemplates import css, bot_template, user_template
+from htmlTemplates import bot_template, user_template
 
 # from src.config.config import settings
 
-# os.environ["TOKENIZERS_PARALLELISM"] = "false"
 load_dotenv()
 
 # OPENAI_API_KEY = settings.openai_api_key
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
 
 
 def save_file(raw_text, file_name):
@@ -31,18 +28,49 @@ def save_file(raw_text, file_name):
         file.write(raw_text)
 
 
-def file_name_link(link_doc):
+def file_name_web(link_doc):
     parsed_url = urlparse(link_doc)
     name = os.path.basename(parsed_url.path)
     file_name, file_extension = os.path.splitext(name)
     return file_name
 
 
-def get_html_text(new_doc):
+def get_web_text(web_doc):
     text = ""
-    for doc in new_doc:
+    for doc in web_doc:
         text += doc.page_content
     return text
+
+
+def file_name_youtube(youtube_link):
+    file_name = "watch_" + youtube_link.split('watch?v=')[-1]
+    return file_name
+
+
+def get_youtube_text(youtube_link):
+    video_id = youtube_link.split('watch?v=')[-1]
+
+    target_language = None
+    transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+
+    for transcript in transcript_list:
+        target_language = transcript.language_code
+        try:
+            transcript_data = transcript.fetch()
+            translated_transcript = transcript.translate(target_language).fetch()
+        except Exception as e:
+            print(f"Error fetching transcript: {e}")
+
+    target_language = target_language
+
+    try:
+        transcript = transcript_list.find_transcript([target_language])
+        transcript_data = transcript.fetch()
+        text = " ".join(entry['text'] for entry in transcript_data)
+        print(text)
+        return text
+    except Exception as e:
+        print(f"Error fetching transcript: {e}")
 
 
 def file_name_pdf(pdf_docs):
