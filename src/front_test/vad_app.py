@@ -1,6 +1,6 @@
-from urllib.parse import urlparse
-from langchain.document_loaders import WebBaseLoader
 
+from langchain.document_loaders import WebBaseLoader
+import requests
 from vad_chat import *
 
 # Base URL for the FastAPI application
@@ -214,6 +214,7 @@ def main():
                                                                         "Upload TXT file",
                                                                         "Upload DOCX file",
                                                                         "Enter web link",
+                                                                        "Enter youtube link",
                                                                         "Upload Saved file", ])
 
         if "conversation" not in st.session_state:
@@ -232,13 +233,26 @@ def main():
             st.subheader("Your documents")
             try:
                 if selected_page == "Enter web link":
-                    link_doc = st.text_input("Enter a web link:")
-                    file_name = file_name_link(link_doc)
+                    web_link = st.text_input("Enter a web link:")
+                    file_name = file_name_web(web_link)
                     if st.button("Process Web Link"):
-                        loader = WebBaseLoader(web_path=link_doc)
-                        html_doc = loader.load()
+                        loader = WebBaseLoader(web_path=web_link)
+                        web_doc = loader.load()
                         with st.spinner("Processing"):
-                            raw_text = get_html_text(html_doc)
+                            raw_text = get_web_text(web_doc)
+                        try:
+                            save_file(raw_text, file_name)
+                            st.success("Saved successfully.")
+                            chat(raw_text)
+                        except Exception as er:
+                            st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Enter youtube link":
+                    youtube_link = st.text_input("Enter a youtube link:")
+                    file_name = file_name_youtube(youtube_link)
+                    if st.button("Process Web Link"):
+                        with st.spinner("Processing"):
+                            raw_text = get_youtube_text(youtube_link)
                         try:
                             save_file(raw_text, file_name)
                             st.success("Saved successfully.")
