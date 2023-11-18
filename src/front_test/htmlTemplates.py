@@ -31,14 +31,16 @@ bot_template = '''
         <img src="https://i.ibb.co/cN0nmSj/Screenshot-2023-05-28-at-02-37-21.png" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>
     <div class="message">{{MSG}}</div>
+    <br>
 </div>
 '''
 
 user_template = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="https://i.ibb.co/4sq2zvN/computer-user-icon-16389.png">
+        <img src="https://i.ibb.co/4sq2zvN/computer-user-icon-16389.png" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>    
     <div class="message">{{MSG}}</div>
+    <br>
 </div>
 '''
