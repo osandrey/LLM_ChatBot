@@ -303,130 +303,117 @@ def main():
                                                                "Update Password"])
 
     elif selected_option == "Chat":
-        # print(user_info)
-        # Add your chat-related page choices here
-        selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
-                                                                        "Upload TXT file",
-                                                                        "Upload DOCX file",
-                                                                        "Enter web link",
-                                                                        "Enter youtube link",
-                                                                        "Upload Saved file", ])
-
-        if "conversation" not in st.session_state:
-            st.session_state.conversation = None
-        if "chat_history" not in st.session_state:
-            st.session_state.chat_history = None
-
-        user_question = st.text_input("Ask a question about your documents:books:")
-        if user_question:
-            handle_userinput(user_question)
-
-        if st.button("Close Chat"):
-            close_chat()
-
-        with st.sidebar:
-            st.subheader("Your documents")
-            try:
-                if selected_page == "Enter web link":
-                    web_link = st.text_input("Enter a web link:")
-                    file_name = file_name_web(web_link)
-                    if st.button("Process Web Link"):
-                        loader = WebBaseLoader(web_path=web_link)
-                        web_doc = loader.load()
-                        with st.spinner("Processing"):
-                            raw_text = get_web_text(web_doc)
-                        try:
-                            save_file(raw_text, file_name)
-                            st.success("Saved successfully.")
-                            chat(raw_text)
-                        except Exception as er:
-                            st.warning(f"Error: {er}. No file to save.")
-
-                elif selected_page == "Enter youtube link":
-                    youtube_link = st.text_input("Enter a youtube link:")
-                    file_name = file_name_youtube(youtube_link)
-                    if st.button("Process Web Link"):
-                        with st.spinner("Processing"):
-                            raw_text = get_youtube_text(youtube_link)
-                        try:
-                            save_file(raw_text, file_name)
-                            st.success("Saved successfully.")
-                            chat(raw_text)
-                        except Exception as er:
-                            st.warning(f"Error: {er}. No file to save.")
-
-                elif selected_page == "Upload PDF file":
-                    pdf_docs = st.file_uploader("Upload your PDFs here and click on 'Process'",
-                                                accept_multiple_files=True)
-                    file_name = file_name_pdf(pdf_docs)
-                    if st.button("Process"):
-                        with st.spinner("Processing"):
-                            try:
-                                raw_text = get_pdf_text(pdf_docs)
-                                save_file(raw_text, file_name)
-                                chat(raw_text)
-                                st.success("Saved successfully.")
-                            except Exception as er:
-                                st.warning(f"Error: {er}. No file to save.")
-
-                elif selected_page == "Upload TXT file":
-                    txt_doc = st.file_uploader("Upload your TXTs here and click on 'Process'",
-                                               accept_multiple_files=True)
-                    file_name = file_name_txt(txt_doc)
-                    if st.button("Process"):
-                        with st.spinner("Processing"):
-                            raw_text = get_txt_text(txt_doc)
-                            try:
-                                save_file(raw_text, file_name)
-                                st.success("Saved successfully.")
-                                chat(raw_text)
-                            except Exception as er:
-                                st.warning(f"Error: {er}. No file to save.")
-
-                elif selected_page == "Upload DOCX file":
-                    docs_doc = st.file_uploader("Upload your DOCXs here and click on 'Process'",
-                                                accept_multiple_files=True)
-                    file_name = file_name_docx(docs_doc)
-                    if st.button("Process"):
-                        with st.spinner("Processing"):
-                            raw_text = get_docx_text(docs_doc)
-                            try:
-                                save_file(raw_text, file_name)
-                                st.success("Saved successfully.")
-                                chat(raw_text)
-                            except Exception as er:
-                                st.warning(f"Error: {er}. No file to save.")
-
-                elif selected_page == "Upload Saved file":
-                    new_doc = st.file_uploader("Upload your Saved file and click on 'Process'",
-                                               accept_multiple_files=True)
-                    if st.button("Process"):
-                        with st.spinner("Processing"):
-                            try:
-                                raw_text = get_txt_text(new_doc)
-                                st.success("Upload successfully.")
-                                chat(raw_text)
-                            except Exception as er:
-                                st.warning(f"Error: {er}. No file to save.")
-
-            except Exception as ex:
-                st.error(f"{ex} Error input!")
-
-
-        if not state.user_info:
+        if state.user_info:
             st.write("Login success !!!!!!!!!!!!!!")
-            selected_page = st.sidebar.selectbox("Select a page for Chat",  ["Chat Page 1", "Chat Page 2", "Chat Page 3"])
+            selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
+                                                                            "Upload TXT file",
+                                                                            "Upload DOCX file",
+                                                                            "Enter web link",
+                                                                            "Enter youtube link",
+                                                                            "Upload Saved file", ])
 
+            if "conversation" not in st.session_state:
+                st.session_state.conversation = None
+            if "chat_history" not in st.session_state:
+                st.session_state.chat_history = None
+
+            user_question = st.text_input("Ask a question about your documents:books:")
+            if user_question:
+                handle_userinput(user_question)
+
+            if st.button("Close Chat"):
+                close_chat()
+
+            with st.sidebar:
+                st.subheader("Your documents")
+                try:
+                    if selected_page == "Enter web link":
+                        web_link = st.text_input("Enter a web link:")
+                        file_name = file_name_web(web_link)
+                        if st.button("Process Web Link"):
+                            loader = WebBaseLoader(web_path=web_link)
+                            web_doc = loader.load()
+                            with st.spinner("Processing"):
+                                raw_text = get_web_text(web_doc)
+                            try:
+                                save_file(raw_text, file_name)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+                    elif selected_page == "Enter youtube link":
+                        youtube_link = st.text_input("Enter a youtube link:")
+                        file_name = file_name_youtube(youtube_link)
+                        if st.button("Process Web Link"):
+                            with st.spinner("Processing"):
+                                raw_text = get_youtube_text(youtube_link)
+                            try:
+                                save_file(raw_text, file_name)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+                    elif selected_page == "Upload PDF file":
+                        pdf_docs = st.file_uploader("Upload your PDFs here and click on 'Process'",
+                                                    accept_multiple_files=True)
+                        file_name = file_name_pdf(pdf_docs)
+                        if st.button("Process"):
+                            with st.spinner("Processing"):
+                                try:
+                                    raw_text = get_pdf_text(pdf_docs)
+                                    save_file(raw_text, file_name)
+                                    chat(raw_text)
+                                    st.success("Saved successfully.")
+                                except Exception as er:
+                                    st.warning(f"Error: {er}. No file to save.")
+
+                    elif selected_page == "Upload TXT file":
+                        txt_doc = st.file_uploader("Upload your TXTs here and click on 'Process'",
+                                                   accept_multiple_files=True)
+                        file_name = file_name_txt(txt_doc)
+                        if st.button("Process"):
+                            with st.spinner("Processing"):
+                                raw_text = get_txt_text(txt_doc)
+                                try:
+                                    save_file(raw_text, file_name)
+                                    st.success("Saved successfully.")
+                                    chat(raw_text)
+                                except Exception as er:
+                                    st.warning(f"Error: {er}. No file to save.")
+
+                    elif selected_page == "Upload DOCX file":
+                        docs_doc = st.file_uploader("Upload your DOCXs here and click on 'Process'",
+                                                    accept_multiple_files=True)
+                        file_name = file_name_docx(docs_doc)
+                        if st.button("Process"):
+                            with st.spinner("Processing"):
+                                raw_text = get_docx_text(docs_doc)
+                                try:
+                                    save_file(raw_text, file_name)
+                                    st.success("Saved successfully.")
+                                    chat(raw_text)
+                                except Exception as er:
+                                    st.warning(f"Error: {er}. No file to save.")
+
+                    elif selected_page == "Upload Saved file":
+                        new_doc = st.file_uploader("Upload your Saved file and click on 'Process'",
+                                                   accept_multiple_files=True)
+                        if st.button("Process"):
+                            with st.spinner("Processing"):
+                                try:
+                                    raw_text = get_txt_text(new_doc)
+                                    st.success("Upload successfully.")
+                                    chat(raw_text)
+                                except Exception as er:
+                                    st.warning(f"Error: {er}. No file to save.")
+
+                except Exception as ex:
+                    st.error(f"{ex} Error input!")
         else:
             st.warning("Please log in to access the chat.")
-            # selected_page = "Log In"
-
-
-        # selected_page = st.sidebar.selectbox("Select a page for Chat", ["Chat Page 1", "Chat Page 2", "Chat Page 3"])
-
-
-
-
+            selected_page = "Log In"
 
     if selected_page == "Sign Up":
         signup()
