@@ -2,8 +2,13 @@ import streamlit as st
 import requests
 import subprocess
 
+from langchain.document_loaders import WebBaseLoader
+
+from chat_functions import *
+
 # Base URL for the FastAPI application
 BASE_URL = "http://localhost:8000/api/auth"
+
 
 # Streamlit App State
 class State:
@@ -12,7 +17,9 @@ class State:
     redirect_to_main = False
     user_info = {}
 
+
 state = State()
+
 
 # Function to sign up a new user
 def signup():
@@ -58,6 +65,7 @@ def signup():
             # Redirect to the login page
             state.current_page = "Log In"
 
+
 # Function to log in a user
 def login():
     st.title("Log In")
@@ -81,7 +89,6 @@ def login():
         else:
             st.error("Log In Failed")
             st.text(response.text)
-
 
         if getattr(state, 'redirect_to_main', False):
             # Reset the redirect flag
@@ -111,9 +118,6 @@ def main_page():
         st.button("Log In", on_click=lambda: st.experimental_set_query_params(page="Log In"))
 
 
-
-
-
 # Function to refresh the access token
 def refresh_token():
     st.title("Refresh Token")
@@ -129,6 +133,7 @@ def refresh_token():
             st.error("Token Refresh Failed")
             st.text(response.text)
 
+
 # Function to confirm email
 def confirmed_email():
     st.title("Confirm Email")
@@ -137,6 +142,7 @@ def confirmed_email():
     if st.button("Confirm Email"):
         response = requests.get(f"{BASE_URL}/confirmed_email/{token}")
         st.json(response.json())
+
 
 # Function to request email confirmation
 def request_email():
@@ -148,6 +154,7 @@ def request_email():
         response = requests.post(f"{BASE_URL}/request_email", json=data)
         st.json(response.json())
 
+
 # Function to reset password
 def reset_password():
     st.title("Reset Password")
@@ -158,6 +165,7 @@ def reset_password():
         response = requests.post(f"{BASE_URL}/reset_password", json=data)
         st.json(response.json())
 
+
 # Function to confirm password reset
 def password_reset_confirm():
     st.title("Password Reset Confirmation")
@@ -166,6 +174,7 @@ def password_reset_confirm():
     if st.button("Confirm Password Reset"):
         response = requests.get(f"{BASE_URL}/password_reset_confirm/{token}")
         st.json(response.json())
+
 
 # Function to update password
 def update_password():
@@ -185,6 +194,7 @@ def update_password():
             st.json(response.json())
         else:
             st.error("Passwords do not match.")
+
 
 # Streamlit App
 # def main():
@@ -214,6 +224,9 @@ def update_password():
 #         update_password()
 
 def main():
+    st.set_page_config(page_title="Chat with multiple PDFs",
+                       page_icon=":books:")
+    st.write(css, unsafe_allow_html=True)
     st.sidebar.title("FastAPI Streamlit App")
 
     # Add a radio button to choose between "Auth" and "Chat" options
@@ -227,9 +240,112 @@ def main():
                                                                "Update Password"])
     elif selected_option == "Chat":
         # Add your chat-related page choices here
-        selected_page = st.sidebar.selectbox("Select a page for Chat", ["Chat Page 1",
-                                                                        "Chat Page 2",
-                                                                        "Chat Page 3"])
+        selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
+                                                                        "Upload TXT file",
+                                                                        "Upload DOCX file",
+                                                                        "Enter web link",
+                                                                        "Enter youtube link",
+                                                                        "Upload Saved file", ])
+
+        if "conversation" not in st.session_state:
+            st.session_state.conversation = None
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = None
+
+        user_question = st.text_input("Ask a question about your documents:books:")
+        if user_question:
+            handle_userinput(user_question)
+
+        if st.button("Close Chat"):
+            close_chat()
+
+        with st.sidebar:
+            st.subheader("Your documents")
+            try:
+                if selected_page == "Enter web link":
+                    web_link = st.text_input("Enter a web link:")
+                    file_name = file_name_web(web_link)
+                    if st.button("Process Web Link"):
+                        loader = WebBaseLoader(web_path=web_link)
+                        web_doc = loader.load()
+                        with st.spinner("Processing"):
+                            raw_text = get_web_text(web_doc)
+                        try:
+                            save_file(raw_text, file_name)
+                            st.success("Saved successfully.")
+                            chat(raw_text)
+                        except Exception as er:
+                            st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Enter youtube link":
+                    youtube_link = st.text_input("Enter a youtube link:")
+                    file_name = file_name_youtube(youtube_link)
+                    if st.button("Process Web Link"):
+                        with st.spinner("Processing"):
+                            raw_text = get_youtube_text(youtube_link)
+                        try:
+                            save_file(raw_text, file_name)
+                            st.success("Saved successfully.")
+                            chat(raw_text)
+                        except Exception as er:
+                            st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Upload PDF file":
+                    pdf_docs = st.file_uploader("Upload your PDFs here and click on 'Process'",
+                                                accept_multiple_files=True)
+                    file_name = file_name_pdf(pdf_docs)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            try:
+                                raw_text = get_pdf_text(pdf_docs)
+                                save_file(raw_text, file_name)
+                                chat(raw_text)
+                                st.success("Saved successfully.")
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Upload TXT file":
+                    txt_doc = st.file_uploader("Upload your TXTs here and click on 'Process'",
+                                               accept_multiple_files=True)
+                    file_name = file_name_txt(txt_doc)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            raw_text = get_txt_text(txt_doc)
+                            try:
+                                save_file(raw_text, file_name)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Upload DOCX file":
+                    docs_doc = st.file_uploader("Upload your DOCXs here and click on 'Process'",
+                                                accept_multiple_files=True)
+                    file_name = file_name_docx(docs_doc)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            raw_text = get_docx_text(docs_doc)
+                            try:
+                                save_file(raw_text, file_name)
+                                st.success("Saved successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+                elif selected_page == "Upload Saved file":
+                    new_doc = st.file_uploader("Upload your Saved file and click on 'Process'",
+                                               accept_multiple_files=True)
+                    if st.button("Process"):
+                        with st.spinner("Processing"):
+                            try:
+                                raw_text = get_txt_text(new_doc)
+                                st.success("Upload successfully.")
+                                chat(raw_text)
+                            except Exception as er:
+                                st.warning(f"Error: {er}. No file to save.")
+
+            except Exception as ex:
+                st.error(f"{ex} Error input!")
 
     # The rest of your code remains unchanged
     if 'page' not in st.experimental_get_query_params():
@@ -258,5 +374,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

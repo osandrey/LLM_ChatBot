@@ -1,23 +1,21 @@
 import os
-from pprint import pprint
 from urllib.parse import urlparse
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from docx import Document
-from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from htmlTemplates import css, bot_template, user_template
+from htmlTemplates import bot_template, user_template
 
 # from src.config.config import settings
 
-# os.environ["TOKENIZERS_PARALLELISM"] = "false"
 load_dotenv()
 
 # OPENAI_API_KEY = settings.openai_api_key

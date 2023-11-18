@@ -4,28 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="commit">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/history/PDF_Converter_Pro_Quick_Reference_Guide.RU.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/history/PDF_Converter_Pro_Quick_Reference_Guide.RU.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/history/me.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/history/me.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/vad_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/vad_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/vad_chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/vad_chat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/custom_chat.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/documents/file sample_docx.docx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/documents/sample.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/history/save.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/htmlTemplates.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/readme.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp/vadim_custom_chat/requirements.txt" beforeDir="false" />
+    <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="коміт перед зливом  vad_app та main_app">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/vad_app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/vad_chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/chat_functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700243580386</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="коміт перед зливом  vad_app та main_app">
+      <option name="closed" value="true" />
+      <created>1700311744394</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700311744394</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -189,17 +180,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merge pull request #5 from osandrey/dev-osa&#10;&#10;Add st" />
     <MESSAGE value="commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/front_test/vad_app.py</url>
-          <line>228</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="коміт перед зливом  vad_app та main_app" />
+    <option name="LAST_COMMIT_MESSAGE" value="коміт перед зливом  vad_app та main_app" />
   </component>
 </project>
