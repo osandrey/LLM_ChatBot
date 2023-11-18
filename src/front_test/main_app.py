@@ -270,6 +270,7 @@ def main():
     elif selected_option == "Chat":
         # print(user_info)
         # Add your chat-related page choices here
+
         if not state.user_info:
             st.write("Login success !!!!!!!!!!!!!!")
             selected_page = st.sidebar.selectbox("Select a page for Chat",  ["Chat Page 1", "Chat Page 2", "Chat Page 3"])
@@ -280,6 +281,8 @@ def main():
 
 
         # selected_page = st.sidebar.selectbox("Select a page for Chat", ["Chat Page 1", "Chat Page 2", "Chat Page 3"])
+
+
 
 
 
