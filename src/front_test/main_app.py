@@ -284,8 +284,8 @@ def update_password(reset_password_token, new_password, confirm_password):
 def main():
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
-    st.write(css, unsafe_allow_html=True)
-        state = State()
+    # st.write(css, unsafe_allow_html=True)
+    state = State()
     selected_page = None
     # user_info = None
     st.sidebar.title("FastAPI Streamlit App")
