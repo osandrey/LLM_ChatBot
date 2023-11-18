@@ -23,7 +23,7 @@ load_dotenv()
 
 OPENAI_API_KEY = settings.openai_api_key
 print(OPENAI_API_KEY)
-OPENAI_API_KEY="!!!!!!!!!!"
+OPENAI_API_KEY = "!!!!!!!!!!"
 
 os.environ[OPENAI_API_KEY] = "!!!!!!!!!!!"
 print(OPENAI_API_KEY)
@@ -31,7 +31,7 @@ print(OPENAI_API_KEY)
 """ Convert PDF to Text"""
 file_path = "./Andrew Osypenko CV Sep 2023.pdf"
 doc = textract.process(filename=file_path)
-txt_file_path = f"{file_path}.txt"
+txt_file_path = f"{file_path.rstrip('.pdf')}.txt"
 """ Save to txt and reopen """
 with open(txt_file_path, "w", encoding="utf-8") as f:
     f.write(doc.decode("utf-8"))
@@ -43,6 +43,7 @@ print(len(text))
 
 """ Create function to count tokens """
 tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+
 
 def count_tokens(text: str) -> int:
     return len(tokenizer.encode(text))
@@ -89,6 +90,7 @@ def print_chat_history():
         print(f'User: {user_query}')
         print(f'Bot: {bot_response}')
         print('-' * 20)
+
 
 print("Welcome to my BOT! Type 'exit' to stop")
 
