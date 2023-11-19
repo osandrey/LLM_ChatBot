@@ -31,10 +31,17 @@ def voice_input(lang):
     r = sr.Recognizer()
     with sr.Microphone(device_index=1) as source:
         print("Listen...")
-        audio = r.listen(source)
 
-    text = r.recognize_google(audio, language=lang)
-    return text
+        audio = r.listen(source)
+    try:
+        text = r.recognize_google(audio, language=lang)
+        return text
+    except sr.UnknownValueError:
+        st.error("Sorry, i didn't get you!")
+        print("I don't understand audio")
+    except sr.RequestError as er:
+        st.error("Sorry, request was failed!")
+        print(f"Could not request results from Speech2Text service; {er}")
 
 
 def file_name_web(link_doc):
