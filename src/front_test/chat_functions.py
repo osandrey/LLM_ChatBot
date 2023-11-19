@@ -12,7 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from htmlTemplates import bot_template, user_template
+from htmlTemplates import css, bot_template, user_template
 import speech_recognition as sr
 
 
@@ -210,7 +210,7 @@ def handle_userinput(user_question):
         pass
 
 
-def close_chat():
-    st.success("Chat closed.")
-    st.rerun()
+# def close_chat():
+#     st.success("Chat closed.")
+#     st.rerun()
 

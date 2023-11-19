@@ -5,6 +5,7 @@ import requests
 # import subprocess
 import openai
 from langchain.document_loaders import WebBaseLoader
+from htmlTemplates import css
 
 from chat_functions import *
 
@@ -26,10 +27,6 @@ class State:
     user_info = False
 
 
-# state = State()
-
-
-# Function to sign up a new user
 def signup():
     st.title("Sign Up")
     username = st.text_input("Username")
@@ -259,34 +256,6 @@ def update_password(reset_password_token, new_password, confirm_password):
         return response.json()
 
 
-# Streamlit App
-# def main():
-#     st.sidebar.title("FastAPI Streamlit App")
-#     selected_page = st.sidebar.selectbox("Select a page", ["Sign Up", "Log In", "Refresh Token",
-#                                                            "Confirm Email", "Request Email Confirmation",
-#                                                            "Reset Password", "Password Reset Confirmation",
-#                                                            "Update Password"])
-#
-#
-#
-#     if selected_page == "Sign Up":
-#         signup()
-#     elif selected_page == "Log In":
-#         login()
-#     elif selected_page == "Refresh Token":
-#         refresh_token()
-#     elif selected_page == "Confirm Email":
-#         confirmed_email()
-#     elif selected_page == "Request Email Confirmation":
-#         request_email()
-#     elif selected_page == "Reset Password":
-#         reset_password()
-#     elif selected_page == "Password Reset Confirmation":
-#         password_reset_confirm()
-#     elif selected_page == "Update Password":
-#         update_password()
-
-
 def gpt_chat(text=None):
     st.title("GPT Chat")
     if "chat_history" not in st.session_state:
@@ -294,15 +263,17 @@ def gpt_chat(text=None):
 
     if text:
         user_input = text
-        st.session_state.chat_history.append({"role": "user", "content": user_input})
         gpt_response = make_gpt_request(user_input)
         st.session_state.chat_history.append({"role": "gpt", "content": gpt_response})
         chat_history_reversed = st.session_state.chat_history[::-1]
-        for i, message in enumerate(chat_history_reversed):
-            if i % 2 == 0:
-                st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
-            else:
-                st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+        try:
+            for i, message in enumerate(chat_history_reversed):
+                if i % 2 == 0:
+                    st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+                else:
+                    st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+        except TypeError:
+            st.error('object is not subscriptable')
 
 
 def make_gpt_request(question):
@@ -329,18 +300,18 @@ def main():
     global lan
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
-    # st.write(css, unsafe_allow_html=True)
+
     state = State()
     selected_page = None
     # user_info = None
-    st.sidebar.title("FastAPI Streamlit App")
+    st.title("FastAPI Streamlit App")
+    st.write(css, unsafe_allow_html=True)
 
-    # Add a radio button to choose between "Auth" and "Chat" options
     selected_option = st.sidebar.radio("Select an option:", ["Auth", "Chat", "GPT-3.5"])
 
     # Based on the selected option, display different page choices
     if selected_option == "Auth":
-        print(state.user_info)
+        # print(state.user_info)
         selected_page = st.sidebar.selectbox("Select a page", ["Sign Up", "Log In", "Refresh Token",
                                                                "Confirm Email", "Request Email Confirmation",
                                                                "Reset Password", "Password Reset Confirmation",
@@ -349,17 +320,18 @@ def main():
     elif selected_option == "GPT-3.5":
         if not state.user_info:
             st.write("Login success !")
-        choice = st.radio("Select input:", ["VOICE",
-                                            "TEXT"
-                                            ])
+        choice = st.sidebar.radio("Select input:", ["VOICE",
+                                                    "TEXT"
+                                                    ])
         if choice == "TEXT":
-            user_input = st.text_input("Ask a question:")
+            user_input = st.sidebar.text_input("Ask a question:")
             gpt_chat(user_input)
+
         if choice == "VOICE":
-            selected_lang = st.radio("Select language:", ["українська",
-                                                          "english",
-                                                          "свинособача"
-                                                          ])
+            selected_lang = st.sidebar.radio("Select language:", ["українська",
+                                                                  "english",
+                                                                  "свинособача"
+                                                                  ])
 
             if selected_lang == "українська":
                 lan = "uk-UA"
@@ -368,13 +340,41 @@ def main():
             elif selected_lang == "свинособача":
                 lan = "ru-RU"
 
-            if st.button("Speak..."):
+            if st.sidebar.button("Speak..."):
                 text = voice_input(lan)
                 gpt_chat(text)
 
     elif selected_option == "Chat":
         if not state.user_info:
             st.write("Login success !")
+
+            if "conversation" not in st.session_state:
+                st.session_state.conversation = None
+            if "chat_history" not in st.session_state:
+                st.session_state.chat_history = None
+            choice = st.sidebar.radio("Select input:", ["VOICE",
+                                                        "TEXT"
+                                                        ])
+            if choice == "TEXT":
+                user_question = st.sidebar.text_input("Ask a question about your documents:books:")
+                if user_question:
+                    handle_userinput(user_question)
+            if choice == "VOICE":
+                selected_lang = st.sidebar.radio("Select language:", ["українська",
+                                                                      "english",
+                                                                      "свинособача"
+                                                                      ])
+
+                if selected_lang == "українська":
+                    lan = "uk-UA"
+                elif selected_lang == "english":
+                    lan = "en-US"
+                elif selected_lang == "свинособача":
+                    lan = "ru-RU"
+
+                if st.sidebar.button("Speak..."):
+                    text = voice_input(lan)
+                    handle_userinput(text)
             selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
                                                                             "Upload TXT file",
                                                                             "Upload DOCX file",
@@ -382,13 +382,7 @@ def main():
                                                                             "Enter youtube link",
                                                                             "Upload Saved file", ])
 
-            if "conversation" not in st.session_state:
-                st.session_state.conversation = None
-            if "chat_history" not in st.session_state:
-                st.session_state.chat_history = None
-
             with st.sidebar:
-                # st.subheader("Your documents")
                 try:
                     if selected_page == "Enter web link":
                         web_link = st.text_input("Enter a web link:")
@@ -475,30 +469,6 @@ def main():
                 except Exception as ex:
                     st.error(f"{ex} Error input!")
 
-            choice = st.radio("Select input:", ["VOICE",
-                                                "TEXT"
-                                                ])
-            if choice == "TEXT":
-                user_question = st.text_input("Ask a question about your documents:books:")
-                if user_question:
-                    handle_userinput(user_question)
-            if choice == "VOICE":
-                selected_lang = st.radio("Select language:", ["українська",
-                                                              "english",
-                                                              "свинособача"
-                                                              ])
-
-                if selected_lang == "українська":
-                    lan = "uk-UA"
-                elif selected_lang == "english":
-                    lan = "en-US"
-                elif selected_lang == "свинособача":
-                    lan = "ru-RU"
-
-                if st.button("Speak..."):
-                    text = voice_input(lan)
-                    handle_userinput(text)
-
         else:
             st.warning("Please log in to access the chat.")
             selected_page = "Log In"
@@ -553,9 +523,6 @@ def main():
                 # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
                 update_password(reset_token, new_password, confirm_password)
                 st.success("Password updated successfully.")
-
-    if st.sidebar.button("Close Chat"):
-        close_chat()
 
 
 if __name__ == "__main__":
