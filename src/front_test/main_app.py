@@ -257,7 +257,7 @@ def update_password(reset_password_token, new_password, confirm_password):
 
 
 def gpt_chat(text=None):
-    st.title("GPT Chat")
+    # st.title("GPT Chat")
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
@@ -319,7 +319,7 @@ def main():
 
     elif selected_option == "GPT-3.5":
         if not state.user_info:
-            st.write("Login success !")
+            st.success("Login success")
         choice = st.sidebar.radio("Select input:", ["VOICE",
                                                     "TEXT"
                                                     ])
@@ -346,7 +346,7 @@ def main():
 
     elif selected_option == "Chat":
         if not state.user_info:
-            st.write("Login success !")
+            st.success("Login success")
 
             if "conversation" not in st.session_state:
                 st.session_state.conversation = None
