@@ -5,6 +5,7 @@ import ipywidgets as widgets
 from IPython.display import display
 import langchain
 import matplotlib.pyplot as plt
+from dotenv import load_dotenv
 from transformers import GPT2TokenizerFast
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -14,19 +15,23 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.llms import OpenAI
 from langchain.chains import ConversationalRetrievalChain
 
-from dotenv import load_dotenv
 
-from src.config.config import settings
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+# from dotenv import load_dotenv
+#
+# from src.config.config import settings
+
+# os.environ["TOKENIZERS_PARALLELISM"] = "false"
 load_dotenv()
 
-OPENAI_API_KEY = settings.openai_api_key
-print(OPENAI_API_KEY)
-OPENAI_API_KEY = "!!!!!!!!!!"
-
-os.environ[OPENAI_API_KEY] = "!!!!!!!!!!!"
-print(OPENAI_API_KEY)
+# OPENAI_API_KEY = settings.openai_api_key
+# print(OPENAI_API_KEY)
+# OPENAI_API_KEY = "!!!!!!!!!!"
+#
+# os.environ[OPENAI_API_KEY] = "!!!!!!!!!!!"
+# load_dotenv()
+#
+# OPENAI_API_KEY = settings.openai_api_key
 
 """ Convert PDF to Text"""
 file_path = "./Andrew Osypenko CV Sep 2023.pdf"

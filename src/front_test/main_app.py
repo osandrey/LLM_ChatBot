@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import streamlit as st
 import requests
 # import subprocess
-
+import openai
 from langchain.document_loaders import WebBaseLoader
 
 from chat_functions import *
@@ -9,8 +11,13 @@ from chat_functions import *
 # Base URL for the FastAPI application
 BASE_URL = "http://localhost:8000/api/auth"
 
+env_path = Path(__file__).resolve().parent.parent / '.env'
+load_dotenv(env_path)
 
-# Streamlit App State
+BASE_DIR = Path(__file__).resolve().parent.parent
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+print(f"!!!!!!!!!!{OPENAI_API_KEY=}")
+
 
 class State:
     current_page = "Sign Up"
@@ -18,8 +25,8 @@ class State:
     redirect_to_main = False
     user_info = False
 
-
 # state = State()
+
 
 
 # Function to sign up a new user
@@ -96,6 +103,7 @@ def login():
             print(f"{state.user_info=}")
             return False
 
+
         # if getattr(state, 'redirect_to_main', False):
         #     # Reset the redirect flag
         #     state.redirect_to_main = False
@@ -112,6 +120,7 @@ def main_page(state):
     else:
         st.write("Please log in to access the main page.")
         st.button("Log In", on_click=lambda: state.__setattr__("current_page", "Log In"))
+
 
 
 # Function to refresh the access token
@@ -279,8 +288,54 @@ def update_password(reset_password_token, new_password, confirm_password):
 #     elif selected_page == "Update Password":
 #         update_password()
 
+
+def gpt_chat():
+    st.title("GPT Chat")
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+
+    user_input = st.text_input("Ask a question:")
+    if st.button("Send"):
+        # Add logic here to send the user_input to your GPT chatbot and get the response
+        # Add the user's message to the chat history
+        st.session_state.chat_history.append({"role": "user", "content": user_input})
+
+        # Add logic here to send the user_input to your GPT chatbot and get the response
+        gpt_response = make_gpt_request(user_input)
+
+        # Add the GPT response to the chat history
+        st.session_state.chat_history.append({"role": "gpt", "content": gpt_response})
+
+        # Display the chat history
+        for message in st.session_state.chat_history:
+            st.write(f"{message['role'].capitalize()}: {message['content']}")
+
+
+
+def make_gpt_request(question):
+    openai.api_key = OPENAI_API_KEY
+    prompt = "You are chatting with a friendly and helpful friend. Feel free to ask me anything!"
+
+
+
+    try:
+        completion = openai.ChatCompletion.create(
+
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": question},
+            ],
+            temperature=0.9,
+        )
+        text = completion.choices[0].message.content
+        return text
+    except Exception as er:
+        print(er)
+
+
+
 def main():
-    global lan
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
     # st.write(css, unsafe_allow_html=True)
@@ -289,8 +344,9 @@ def main():
     # user_info = None
     st.sidebar.title("FastAPI Streamlit App")
 
+
     # Add a radio button to choose between "Auth" and "Chat" options
-    selected_option = st.sidebar.radio("Select an option:", ["Auth", "Chat"])
+    selected_option = st.sidebar.radio("Select an option:", ["Auth", "Chat", "GPT-3.5"])
 
     # Based on the selected option, display different page choices
     if selected_option == "Auth":
@@ -300,9 +356,18 @@ def main():
                                                                "Reset Password", "Password Reset Confirmation",
                                                                "Update Password"])
 
+    elif selected_option == "GPT-3.5":
+        if not state.user_info:
+            st.write("Login success !")
+            gpt_chat()
+            # selected_page = st.sidebar.selectbox("Select a page", ["GPT-3.5-turbo"])
+
+
+
+
     elif selected_option == "Chat":
         if not state.user_info:
-            st.write("Login success !!!!!!!!!!!!!!")
+            st.write("Login success !")
             selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
                                                                             "Upload TXT file",
                                                                             "Upload DOCX file",
@@ -314,6 +379,13 @@ def main():
                 st.session_state.conversation = None
             if "chat_history" not in st.session_state:
                 st.session_state.chat_history = None
+
+            user_question = st.text_input("Ask a question about your documents:books:")
+            if user_question:
+                handle_userinput(user_question)
+
+            if st.button("Close Chat"):
+                close_chat()
 
             with st.sidebar:
                 st.subheader("Your documents")
@@ -402,30 +474,6 @@ def main():
 
                 except Exception as ex:
                     st.error(f"{ex} Error input!")
-
-            user_question = st.text_input("Ask a question about your documents:books:")
-            if user_question:
-                handle_userinput(user_question)
-
-            selected_lang = st.radio("Select language:", ["українська",
-                                                          "english",
-                                                          "свинособача"
-                                                          ])
-
-            if selected_lang == "українська":
-                lan = "uk-UA"
-            elif selected_lang == "english":
-                lan = "en-US"
-            elif selected_lang == "свинособача":
-                lan = "ru-RU"
-
-            if st.button("Speak..."):
-                text = voice_input(lan)
-                handle_userinput(text)
-
-            if st.button("Close Chat"):
-                close_chat()
-
         else:
             st.warning("Please log in to access the chat.")
             selected_page = "Log In"
@@ -468,18 +516,19 @@ def main():
             # if st.button("Confirm Password Reset"):
             #     st.success("Password reset confirmed.")
 
-            # Step 3: Update Password
-            # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
-            # new_password = st.text_input("Enter your new password:", type="password")
-            # print(f"!!!!!!! !!!!First Pas {new_password}")
-            # confirm_password = st.text_input("Confirm your new password:")
-            # print(f"!!!!!!! !!!!!Second Pas {confirm_password}")
+                # Step 3: Update Password
+                # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
+                # new_password = st.text_input("Enter your new password:", type="password")
+                # print(f"!!!!!!! !!!!First Pas {new_password}")
+                # confirm_password = st.text_input("Confirm your new password:")
+                # print(f"!!!!!!! !!!!!Second Pas {confirm_password}")
             if st.button("Update Password"):
                 # if new_password == confirm_password:
-                # Use the confirmed_token from the confirmation step
-                # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
+                    # Use the confirmed_token from the confirmation step
+                    # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
                 update_password(reset_token, new_password, confirm_password)
                 st.success("Password updated successfully.")
+
 
 
 if __name__ == "__main__":

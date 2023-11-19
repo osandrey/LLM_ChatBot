@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="виправив помилку при авторизації">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/front_test/history/Andrew Osypenko.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/front_test/history/watch_ADi7F695d90.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/front_test/history/watch_AT91HF6PQvE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/front_test/history/watch_CpXlvLOyBVI.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/front_test/history/watch_o0FCW-iN9OU.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/chat_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/chat_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/history/PDF_Converter_Pro_Quick_Reference_Guide.RU.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/history/PDF_Converter_Pro_Quick_Reference_Guide.RU.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/front_test/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_llm/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_llm/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_llm/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_llm/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +43,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2YGSd5lk9KWVCa1yrKviR0U60He" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -49,7 +55,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "vadim",
+    "git-widget-placeholder": "dev",
     "last_opened_file_path": "D:/work_it/github/python/temp",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
