@@ -291,19 +291,7 @@ def gpt_chat(text=None):
     st.title("GPT Chat")
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
-    # if not text:
-    #     user_input = st.text_input("Ask a question:")
 
-        # if st.button("Send"):
-        #     st.session_state.chat_history.append({"role": "user", "content": user_input})
-        #     gpt_response = make_gpt_request(user_input)
-        #     st.session_state.chat_history.append({"role": "gpt", "content": gpt_response})
-        #     chat_history_reversed = st.session_state.chat_history[::-1]
-        #     for i, message in enumerate(chat_history_reversed):
-        #         if i % 2 == 0:
-        #             st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
-        #         else:
-        #             st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
     if text:
         user_input = text
         st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -361,6 +349,13 @@ def main():
     elif selected_option == "GPT-3.5":
         if not state.user_info:
             st.write("Login success !")
+        choice = st.radio("Select input:", ["VOICE",
+                                            "TEXT"
+                                            ])
+        if choice == "TEXT":
+            user_input = st.text_input("Ask a question:")
+            gpt_chat(user_input)
+        if choice == "VOICE":
             selected_lang = st.radio("Select language:", ["українська",
                                                           "english",
                                                           "свинособача"
@@ -376,12 +371,6 @@ def main():
             if st.button("Speak..."):
                 text = voice_input(lan)
                 gpt_chat(text)
-            else:
-                user_input = st.text_input("Ask a question:")
-                gpt_chat(user_input)
-
-            if st.button("Close Chat"):
-                close_chat()
 
     elif selected_option == "Chat":
         if not state.user_info:
@@ -399,7 +388,7 @@ def main():
                 st.session_state.chat_history = None
 
             with st.sidebar:
-                st.subheader("Your documents")
+                # st.subheader("Your documents")
                 try:
                     if selected_page == "Enter web link":
                         web_link = st.text_input("Enter a web link:")
@@ -486,28 +475,29 @@ def main():
                 except Exception as ex:
                     st.error(f"{ex} Error input!")
 
-            user_question = st.text_input("Ask a question about your documents:books:")
-            if user_question:
-                handle_userinput(user_question)
+            choice = st.radio("Select input:", ["VOICE",
+                                                "TEXT"
+                                                ])
+            if choice == "TEXT":
+                user_question = st.text_input("Ask a question about your documents:books:")
+                if user_question:
+                    handle_userinput(user_question)
+            if choice == "VOICE":
+                selected_lang = st.radio("Select language:", ["українська",
+                                                              "english",
+                                                              "свинособача"
+                                                              ])
 
-            selected_lang = st.radio("Select language:", ["українська",
-                                                          "english",
-                                                          "свинособача"
-                                                          ])
+                if selected_lang == "українська":
+                    lan = "uk-UA"
+                elif selected_lang == "english":
+                    lan = "en-US"
+                elif selected_lang == "свинособача":
+                    lan = "ru-RU"
 
-            if selected_lang == "українська":
-                lan = "uk-UA"
-            elif selected_lang == "english":
-                lan = "en-US"
-            elif selected_lang == "свинособача":
-                lan = "ru-RU"
-
-            if st.button("Speak..."):
-                text = voice_input(lan)
-                handle_userinput(text)
-
-            if st.button("Close Chat"):
-                close_chat()
+                if st.button("Speak..."):
+                    text = voice_input(lan)
+                    handle_userinput(text)
 
         else:
             st.warning("Please log in to access the chat.")
@@ -563,6 +553,9 @@ def main():
                 # confirmed_token = password_reset_confirm(email_for_reset, token_for_confirmation)
                 update_password(reset_token, new_password, confirm_password)
                 st.success("Password updated successfully.")
+
+    if st.sidebar.button("Close Chat"):
+        close_chat()
 
 
 if __name__ == "__main__":
