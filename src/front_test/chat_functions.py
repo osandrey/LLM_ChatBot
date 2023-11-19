@@ -192,8 +192,9 @@ def handle_userinput(user_question):
     if st.session_state.conversation is not None:
         response = st.session_state.conversation({'question': user_question})
         st.session_state.chat_history = response['chat_history']
+        chat_history_reversed = st.session_state.chat_history[::-1]
 
-        for i, message in enumerate(st.session_state.chat_history):
+        for i, message in enumerate(chat_history_reversed):
             if i % 2 == 0:
                 st.write(user_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
             else:
@@ -203,10 +204,6 @@ def handle_userinput(user_question):
 
 
 def close_chat():
-    if st.session_state.conversation is not None:
-        st.session_state.conversation = None
-        st.session_state.chat_history = None
-        st.success("Chat closed.")
-        st.rerun()
-    else:
-        st.warning("No active chat to close.")
+    st.success("Chat closed.")
+    st.rerun()
+
