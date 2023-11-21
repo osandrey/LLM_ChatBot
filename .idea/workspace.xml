@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="виправив помилку при авторизації">
+      <change afterPath="$PROJECT_DIR$/static/robot_gpt.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/static/avatar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/banner.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/cover.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,23 +53,25 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "lrsb",
-    "last_opened_file_path": "D:/work_it/github/python/temp",
+    "git-widget-placeholder": "vadnet",
+    "last_opened_file_path": "D:/work_it/github",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\front_test" />
+      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\static" />
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\config" />
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot" />
-      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\front_test" />
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\docs" />
-      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot" />
+      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\front_test\static" />
+      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\front_test" />
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\docs" />
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\front_test\history" />
-      <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\config" />
     </key>
   </component>
   <component name="RunManager" selected="Python.yout">
