@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="виправив помилку при авторизації">
+    <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="21 nov after prepassing">
+      <change afterPath="$PROJECT_DIR$/src/front_test/chat_history.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/chat_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/chat_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/htmlTemplates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/front_test/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/main_app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,16 +44,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/work_it/github/python/temp",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/work_it/github/python/temp&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\config" />
@@ -68,7 +68,7 @@
       <recent name="D:\work_it\github\goit_school\home_works\python_data_science\DS_Finaly_Project\DS_Project\LLM_ChatBot\src\config" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ChatBot_LLM" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -183,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700314287884</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="21 nov after prepassing">
+      <created>1700578752132</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700578752132</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -203,6 +210,7 @@
     <MESSAGE value="коміт перед зливом  vad_app та main_app" />
     <MESSAGE value="виправив помилки після пул реквесту" />
     <MESSAGE value="виправив помилку при авторизації" />
-    <option name="LAST_COMMIT_MESSAGE" value="виправив помилку при авторизації" />
+    <MESSAGE value="21 nov after prepassing" />
+    <option name="LAST_COMMIT_MESSAGE" value="21 nov after prepassing" />
   </component>
 </project>
