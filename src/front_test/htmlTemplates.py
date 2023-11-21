@@ -32,7 +32,7 @@ css = '''
 bot_template = '''
 <div class="chat-message bot">
     <div class="avatar">
-        <img src="https://img6.arthub.ai/651bcd22-d464.webp" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
+        <img src="https://i.ibb.co/68YkQjs/robot-gpt.png" alt="avatar" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>
     <div class="message">{{MSG}}</div>
     <br>
@@ -42,7 +42,7 @@ bot_template = '''
 user_template = '''
 <div class="chat-message user">
     <div class="avatar">
-        <img src="https://assets.fireside.fm/file/fireside-images/podcasts/images/e/e78a2140-b820-478c-9506-054f2b7e2de2/hosts/3/39b9a9a3-0a20-454c-99b0-2c202023176b/avatar_small.jpg?v=1" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
+        <img src="https://i.ibb.co/ZTx1Fbr/avatar.png" alt="robot-gpt" style="max-height: 78px; max-width: 78px; border-radius: 50%; object-fit: cover;">
     </div>    
     <div class="message">{{MSG}}</div>
     <br>
