@@ -1,5 +1,7 @@
-from pathlib import Path
 
+import json
+from pathlib import Path
+import os
 import streamlit as st
 import requests
 # import subprocess
@@ -17,7 +19,7 @@ load_dotenv(env_path)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-print(f"!!!!!!!!!!{OPENAI_API_KEY=}")
+# print(f"!!!!!!!!!!{OPENAI_API_KEY=}")
 
 
 class State:
@@ -255,25 +257,51 @@ def update_password(reset_password_token, new_password, confirm_password):
         st.json(response.json())
         return response.json()
 
-
 def gpt_chat(text=None):
-    # st.title("GPT Chat")
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
 
     if text:
         user_input = text
         gpt_response = make_gpt_request(user_input)
+        st.session_state.chat_history.append({"role": "user", "content": user_input})
         st.session_state.chat_history.append({"role": "gpt", "content": gpt_response})
         chat_history_reversed = st.session_state.chat_history[::-1]
         try:
-            for i, message in enumerate(chat_history_reversed):
-                if i % 2 == 0:
-                    st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
-                else:
-                    st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+            for message in chat_history_reversed:
+                role, content = message["role"], message["content"]
+                if role == "gpt":
+                    st.write(bot_template.replace("{{MSG}}", content), unsafe_allow_html=True)
+                elif role == "user":
+                    st.write(user_template.replace("{{MSG}}", content), unsafe_allow_html=True)
+        # try:
+        #     for i, message in enumerate(chat_history_reversed):
+        #         if i % 2 == 0:
+        #             st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+        #         else:
+        #             st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
         except TypeError:
             st.error('object is not subscriptable')
+
+
+# def gpt_chat(text=None):
+#     # st.title("GPT Chat")
+#     if "chat_history" not in st.session_state:
+#         st.session_state.chat_history = []
+#
+#     if text:
+#         user_input = text
+#         gpt_response = make_gpt_request(user_input)
+#         st.session_state.chat_history.append({"role": "gpt", "content": gpt_response})
+#         chat_history_reversed = st.session_state.chat_history[::-1]
+#         try:
+#             for i, message in enumerate(chat_history_reversed):
+#                 if i % 2 == 0:
+#                     st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+#                 else:
+#                     st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+#         except TypeError:
+#             st.error('object is not subscriptable')
 
 
 def make_gpt_request(question):
@@ -345,6 +373,11 @@ def main():
                 gpt_chat(text)
 
     elif selected_option == "Chat":
+        close_chat_button = st.button("Close Chat")
+
+
+        if close_chat_button:
+            close_chat()
         if not state.user_info:
             st.success("Login success")
 
@@ -352,6 +385,47 @@ def main():
                 st.session_state.conversation = None
             if "chat_history" not in st.session_state:
                 st.session_state.chat_history = None
+
+            load_history_button = st.button("Load Chat History")
+
+            if load_history_button:
+                st.session_state.chat_history = load_chat_history("chat_history.json")
+                st.success("Chat history loaded successfully.")
+
+                # Display chat history
+                if st.session_state.chat_history:
+                    st.subheader("Chat History")
+                    for message in st.session_state.chat_history:
+                        if isinstance(message, dict) and "type" in message:
+                            if message["type"].lower() == "human":
+                                st.write(user_template.replace("{{MSG}}", message.get('content', '')),
+                                         unsafe_allow_html=True)
+                            elif message["type"].lower() == "ai":
+                                st.write(bot_template.replace("{{MSG}}", message.get('content', '')),
+                                         unsafe_allow_html=True)
+                        elif isinstance(message, HumanMessage):
+                            st.write(user_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
+                        elif isinstance(message, AIMessage):
+                            st.write(bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
+
+                # # Display chat history
+                # if st.session_state.chat_history:
+                #     st.subheader("Chat History")
+                #     for message in st.session_state.chat_history:
+                #         if isinstance(message, dict) and "type" in message:
+                #             if message["type"].lower() == "human":
+                #                 st.text(f"User: {message['content']}")
+                #             elif message["type"].lower() == "ai":
+                #                 st.text(f"AI: {message['content']}")
+                #         elif isinstance(message, HumanMessage):
+                #             st.write(user_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+                #         elif isinstance(message, AIMessage):
+                #             st.write(bot_template.replace("{{MSG}}", message['content']), unsafe_allow_html=True)
+                #
+
+
+
+
             choice = st.sidebar.radio("Select input:", ["VOICE",
                                                         "TEXT"
                                                         ])
@@ -375,6 +449,8 @@ def main():
                 if st.sidebar.button("Speak..."):
                     text = voice_input(lan)
                     handle_userinput(text)
+
+
             selected_page = st.sidebar.selectbox("Select a page for Chat", ["Upload PDF file",
                                                                             "Upload TXT file",
                                                                             "Upload DOCX file",

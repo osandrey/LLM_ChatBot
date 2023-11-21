@@ -1,9 +1,12 @@
 import os
+import json
+from pathlib import Path
 from urllib.parse import urlparse
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from docx import Document
+from langchain.schema import HumanMessage, AIMessage
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
@@ -29,19 +32,18 @@ def save_file(raw_text, file_name):
 
 def voice_input(lang):
     r = sr.Recognizer()
-    with sr.Microphone(device_index=1) as source:
-        print("Listen...")
-
-        audio = r.listen(source)
-    try:
-        text = r.recognize_google(audio, language=lang)
-        return text
-    except sr.UnknownValueError:
-        st.error("Sorry, i didn't get you!")
-        print("I don't understand audio")
-    except sr.RequestError as er:
-        st.error("Sorry, request was failed!")
-        print(f"Could not request results from Speech2Text service; {er}")
+    with sr.Microphone() as source:
+        try:
+            st.write("Listen...")
+            audio = r.listen(source)
+            text = r.recognize_google(audio, language=lang)
+            return text
+        except sr.UnknownValueError:
+            st.error("Sorry, i didn't get you!")
+        # print("I don't understand audio")
+        except sr.RequestError as er:
+            st.error("Sorry, request was failed!")
+            print(f"Could not request results from Speech2Text service; {er}")
 
 
 def file_name_web(link_doc):
@@ -202,15 +204,108 @@ def handle_userinput(user_question):
         chat_history_reversed = st.session_state.chat_history[::-1]
 
         for i, message in enumerate(chat_history_reversed):
-            if i % 2 == 0:
+            if i % 2 == 1:
                 st.write(user_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
             else:
                 st.write(bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
     else:
         pass
 
+"""Added history svae/load"""
+
+
+# def save_chat_history(chat_history, file_name):
+#     print("Chat History:", chat_history)
+#     chat_history_file = Path(file_name)
+#     with open(chat_history_file, 'w', encoding='utf-8') as file:
+#         json.dump(chat_history, file)
+
+def save_chat_history(chat_history, file_path):
+    def convert_to_dict(obj):
+        if isinstance(obj, HumanMessage) or isinstance(obj, AIMessage):
+            return obj.__dict__
+        return obj
+
+    with open(file_path, "w") as file:
+        json.dump(chat_history, file, default=convert_to_dict, indent=2)
+
+
+# def load_chat_history(file_name = "chat_history.json"):
+#     chat_history_file = Path(file_name)
+#     if chat_history_file.is_file():
+#         with open(chat_history_file, 'r', encoding='utf-8') as file:
+#             # Use object_hook to convert dictionaries to custom classes
+#             return json.load(file, object_hook=convert_to_object)
+#     else:
+#         return []
+def load_chat_history(file_name):
+    chat_history_file = Path(file_name)
+    if chat_history_file.is_file():
+        with open(chat_history_file, 'r', encoding='utf-8') as file:
+            json_data = json.load(file)
+
+            # Manually convert each element to the appropriate type
+            chat_history = []
+            for item in json_data:
+                if 'type' in item:
+                    if item['type'].lower() == 'human':
+                        chat_history.append(HumanMessage(**item))
+                    elif item['type'].lower() == 'ai':
+                        chat_history.append(AIMessage(**item))
+                else:
+                    # Handle other cases as needed
+                    chat_history.append(item)
+
+            return chat_history
+    else:
+        return []
+
+
+
+# def convert_to_object(obj_dict):
+#     if isinstance(obj_dict, dict):
+#         if 'content' in obj_dict and 'type' in obj_dict:
+#             if obj_dict['type'].lower() == 'human':
+#                 return HumanMessage(**obj_dict)
+#             elif obj_dict['type'].lower() == 'ai':
+#                 return AIMessage(**obj_dict)
+#     return obj_dict
+
+
+# def convert_to_object(obj_dict):
+#     if 'content' in obj_dict and 'type' in obj_dict:
+#         if obj_dict['type'].lower() == 'human':
+#             return HumanMessage(**obj_dict)
+#         elif obj_dict['type'].lower() == 'ai':
+#             return AIMessage(**obj_dict)
+#     return obj_dict
+
+# def load_chat_history(file_name):
+#     chat_history_file = Path(file_name)
+#     if chat_history_file.is_file():
+#         with open(chat_history_file, 'r', encoding='utf-8') as file:
+#             return json.load(file)
+#     else:
+#         return []
+
+def close_chat():
+    if st.session_state.conversation is not None:
+        chat_history = st.session_state.chat_history
+        save_chat_history(chat_history, "chat_history.json")
+
+        st.session_state.conversation = None
+        st.session_state.chat_history = None
+        st.success("Chat closed.")
+        st.rerun()
+    else:
+        st.warning("No active chat to close.")
+
 
 # def close_chat():
-#     st.success("Chat closed.")
-#     st.rerun()
-
+#     if st.session_state.conversation is not None:
+#         st.session_state.conversation = None
+#         st.session_state.chat_history = None
+#         st.success("Chat closed.")
+#         st.rerun()
+#     else:
+#         st.warning("No active chat to close.")
