@@ -12,7 +12,7 @@ from chat_functions import *
 
 # Base URL for the FastAPI application
 BASE_URL = "http://localhost:8000/api/auth"
-
+#BASE_URL = "http://134.122.104.117:8000/api/auth"
 env_path = Path(__file__).resolve().parent.parent / '.env'
 load_dotenv(env_path)
 

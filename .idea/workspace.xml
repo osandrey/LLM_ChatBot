@@ -5,10 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b3051e-97a6-47aa-a2ea-a3e81410e586" name="Changes" comment="21 nov after prepassing">
-      <change afterPath="$PROJECT_DIR$/src/front_test/chat_history.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DEPLOY_PIPLINE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fly.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/0e47971e096f_new.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/820fb8a9bccc_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/8706c03685e3_new.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/front_test/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/front_test/chat_history.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/front_test/chat_history.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/auth.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +202,21 @@
       <option name="project" value="LOCAL" />
       <updated>1700578752132</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="21 nov after prepassing">
+      <created>1700580423800</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700580423800</updated>
+    </task>
+    <task id="LOCAL-00010" summary="21 nov after prepassing">
+      <created>1700580542741</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1700580542741</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

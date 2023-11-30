@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     mail_server: str = 'test'
     redis_host: str = 'localhost'
     redis_port: int = 6379
+    redis_password: str = "test"
     cloudinary_name: str = 'test'
     cloudinary_api_key: str = 'test'
     cloudinary_api_secret: str = 'test'
@@ -34,4 +35,4 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-print(settings.sqlalchemy_database_url)
+# print(settings.sqlalchemy_database_url)

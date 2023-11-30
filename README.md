@@ -52,3 +52,5 @@ FastAPI, Streamlit, PostgresSQL, Docker, OpenAI, Faiss, Git, LangChain, Cloudina
 # Shut off
 - terminal with uvicorn -> Press CTRL+C to quit
 - terminal with docker run: `docker-compose down` -> shut Redis+Postgres
+
+

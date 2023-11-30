@@ -19,7 +19,8 @@ app = FastAPI(title="LLM-ChatBot")
 
 
 origins = ["*",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "134.122.104.117"
 ]
 
 app.add_middleware(
